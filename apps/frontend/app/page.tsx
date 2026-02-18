@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import axios from "axios"
+import { getFileType } from "@/services/getFileType"
 
 type ApiResponse = {
   files: string[]
@@ -20,7 +21,7 @@ export default function Home() {
       setImages(res.data.files)
     } catch (err: any) {
       console.error(err)
-      setError("Failed to connect to backend")
+      setError("Backend is Down!")
     } finally {
       setLoading(false)
     }
@@ -45,7 +46,7 @@ export default function Home() {
         {/* Loading */}
         {loading && (
           <div className="text-center text-2xl mt-10 animate-pulse">
-            Loading images...
+            Loading Files...
           </div>
         )}
 
@@ -63,21 +64,64 @@ export default function Home() {
           </div>
         )}
 
-        {/* Images Grid */}
+        {/* Files Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-10">
-          {images.map((url, index) => (
-            <div
-              key={index}
-              className="bg-[#1a1a1a] rounded-2xl overflow-hidden shadow-lg hover:scale-105 transition duration-300"
-            >
-              <img
-                src={url}
-                alt={`S3 File ${index}`}
-                className="w-full h-64 object-cover"
-                loading="lazy"
-              />
-            </div>
-          ))}
+          {images.map((url, index) => {
+            const type = getFileType(url)
+
+            return (
+              <div
+                key={index}
+                className="bg-[#1a1a1a] rounded-2xl overflow-hidden shadow-lg hover:scale-105 transition duration-300 p-2"
+              >
+
+                {/* IMAGE */}
+                {type === "image" && (
+                  <img
+                    src={url}
+                    alt={`file-${index}`}
+                    className="w-full h-64 object-cover rounded-xl"
+                    loading="lazy"
+                  />
+                )}
+
+                {/* VIDEO */}
+                {type === "video" && (
+                  <video
+                    controls
+                    className="w-full h-64 object-cover rounded-xl"
+                  >
+                    <source src={url} />
+                    Your browser does not support video.
+                  </video>
+                )}
+
+                {/* PDF */}
+                {type === "pdf" && (
+                  <iframe
+                    src={url}
+                    className="w-full h-64 rounded-xl bg-white"
+                  />
+                )}
+
+                {/* OTHER FILES */}
+                {type === "other" && (
+                  <div className="flex flex-col items-center justify-center h-64">
+                    <p className="text-gray-400 mb-3">Unsupported preview</p>
+                    <a
+                      href={url}
+                      target="_blank"
+                      className="bg-blue-600 px-4 py-2 rounded-xl hover:bg-blue-500"
+                    >
+                      Download File
+                    </a>
+                  </div>
+                )}
+
+              </div>
+            )
+          })}
+
         </div>
 
       </div>

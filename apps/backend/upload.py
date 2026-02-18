@@ -94,7 +94,7 @@ def main():
   filePath_toupload = input("Enter the File Path to upload to s3: ")
   s3FileName = input("Enter the Name of S3 File: ")
 
-  if (s3FileName.endswith(("png", "jpg", "jpeg", "pdf"))): # etcetc..
+  if (s3FileName.endswith(("png", "jpg", "jpeg", "pdf", "mp4"))): # etcetc..
     uploadFile_previewable(file_path=filePath_toupload, s3_file_name=s3FileName)
   else:
     print("Upload failed: S3 File Name not with proper extension")
