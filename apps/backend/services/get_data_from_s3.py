@@ -32,7 +32,3 @@ def get_s3_urls():
   
   except Exception as e:
     print(f"What went wrong: {e}")
-
-if __name__ == "__main__":
-  LOAD_ENV()
-  get_s3_urls()

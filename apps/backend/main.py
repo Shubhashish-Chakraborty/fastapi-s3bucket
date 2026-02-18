@@ -9,7 +9,12 @@ async def root():
 @app.get("/data")
 async def fetch_data():
   urls = get_s3_urls()
-  return {
-    "files": urls,
-    "count": len(urls)
-  }
+  if (not urls):
+    return {
+      "message": "S3 Bucket is Empty!"
+    }
+  else:
+    return {
+      "files": urls,
+      "count": len(urls)
+    }
