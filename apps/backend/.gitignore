@@ -1,0 +1,7 @@
+__pycache__
+venv/
+**pycache**/
+*.pyc
+.env
+.aws/
+fileurls.txt
